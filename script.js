@@ -56,6 +56,13 @@ messaging.onTokenRefresh(function() {
         });
 });
 
+// Handle incoming messages
+messaging.onMessage(function(payload) {
+    alert("Notification received: ", payload);
+    console.log("Notification received: ", payload);
+    toastr["info"](payload.notification.body, payload.notification.title);
+});
+
 // Send the Instance ID token your application server, so that it can:
 // - send messages back to this app
 // - subscribe/unsubscribe the token from topics
