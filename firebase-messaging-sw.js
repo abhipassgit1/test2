@@ -20,3 +20,13 @@ messaging.setBackgroundMessageHandler(function(payload) {
     return self.registration.showNotification(notificationTitle,
         notificationOptions);
 });
+
+// Handle FCM messages
+    onMessage(messaging, (payload) => {
+      console.log('Received FCM Message:', payload);
+      // Display notification without a service worker
+      const notification = new Notification(payload.notification.title, {
+        body: payload.notification.body,
+        icon: payload.notification.icon,
+      });
+    });
