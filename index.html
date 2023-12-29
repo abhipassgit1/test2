@@ -8,6 +8,12 @@
     <link rel="manifest" href="manifest.json">
     <link rel="shortcut icon" href="favicon.ico">
     <title>FCM Demo</title>
+
+    <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js';
+    import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-messaging.js';
+    </script>
+    
     <link rel="stylesheet" href="toastr.min.css">
 </head>
 <body>
