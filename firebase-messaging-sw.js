@@ -1,7 +1,6 @@
 // Give the service worker access to Firebase Messaging.
-importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js');
-
+importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js')
+importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js')
 
 // Initialize the Firebase app in the service worker by passing in the messagingSenderId.
 var config = {
@@ -10,14 +9,18 @@ var config = {
 firebase.initializeApp(config);
 
 // Retrieve an instance of Firebase Data Messaging so that it can handle background messages.
-const messaging = firebase.messaging()
-messaging.setBackgroundMessageHandler(function(payload) {
+const messaging = firebase.messaging();
+
+// Handle messages when the web page is in the foreground
+messaging.onMessage(function(payload) {
     const notificationTitle = 'Data Message Title';
     const notificationOptions = {
         body: 'Data Message body',
         icon: 'alarm.png'
     };
 
-    return self.registration.showNotification(notificationTitle,
-        notificationOptions);
+    // Show the notification only when the web page is in the foreground
+    if (document.visibilityState === 'visible') {
+        self.registration.showNotification(notificationTitle, notificationOptions);
+    }
 });
