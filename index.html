@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Web App</title>
     
-    <!-- Include Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js"></script>
+    <!-- Use the non-module version of Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 
     <!-- Include Toastr library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -19,7 +19,7 @@
 <!-- Your HTML content goes here -->
 
 <!-- Include your consolidated script -->
-<script>
+<script defer>
     // Your consolidated script here
     var config = {
         messagingSenderId: "582035422102"
