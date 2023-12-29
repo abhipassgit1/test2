@@ -3,47 +3,43 @@ var config = {
     messagingSenderId: "582035422102"
 };
 firebase.initializeApp(config);
+
 const messaging = firebase.messaging();
 
-navigator.serviceWorker.register('firebase-messaging-sw.js')
-    .then(function (registration) {
-        messaging.useServiceWorker(registration);
-
-        // Request for permission
-        messaging.requestPermission()
-            .then(function() {
-                console.log('Notification permission granted.');
-                // TODO(developer): Retrieve an Instance ID token for use with FCM.
-                messaging.getToken()
-                    .then(function(currentToken) {
-                        if (currentToken) {
-                            console.log('Token: ' + currentToken)
-                            sendTokenToServer(currentToken);
-                        } else {
-                            console.log('No Instance ID token available. Request permission to generate one.');
-                            setTokenSentToServer(false);
-                        }
-                    })
-                    .catch(function(err) {
-                        console.log('An error occurred while retrieving token. ', err);
-                        setTokenSentToServer(false);
-                    });
+// Request for permission
+messaging.requestPermission()
+    .then(function () {
+        console.log('Notification permission granted.');
+        // TODO(developer): Retrieve an Instance ID token for use with FCM.
+        messaging.getToken()
+            .then(function (currentToken) {
+                if (currentToken) {
+                    console.log('Token: ' + currentToken)
+                    sendTokenToServer(currentToken);
+                } else {
+                    console.log('No Instance ID token available. Request permission to generate one.');
+                    setTokenSentToServer(false);
+                }
             })
-            .catch(function(err) {
-                console.log('Unable to get permission to notify.', err);
+            .catch(function (err) {
+                console.log('An error occurred while retrieving token. ', err);
+                setTokenSentToServer(false);
             });
+    })
+    .catch(function (err) {
+        console.log('Unable to get permission to notify.', err);
     });
 
 // Handle incoming messages
-messaging.onMessage(function(payload) {
+messaging.onMessage(function (payload) {
     console.log("Notification received: ", payload);
     toastr["info"](payload.notification.body, payload.notification.title);
 });
 
 // Callback fired if Instance ID token is updated.
-messaging.onTokenRefresh(function() {
+messaging.onTokenRefresh(function () {
     messaging.getToken()
-        .then(function(refreshedToken) {
+        .then(function (refreshedToken) {
             console.log('Token refreshed.');
             // Indicate that the new Instance ID token has not yet been sent
             // to the app server.
@@ -51,7 +47,7 @@ messaging.onTokenRefresh(function() {
             // Send Instance ID token to app server.
             sendTokenToServer(refreshedToken);
         })
-        .catch(function(err) {
+        .catch(function (err) {
             console.log('Unable to retrieve refreshed token ', err);
         });
 });
