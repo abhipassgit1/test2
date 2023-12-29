@@ -37,7 +37,7 @@ navigator.serviceWorker.register('firebase-messaging-sw.js')
 // Handle incoming messages
 messaging.onMessage(function(payload) {
     console.log("Notification received: ", payload);
-   // toastr["info"](payload.notification.body, payload.notification.title);
+    toastr["info"](payload.notification.body, payload.notification.title);
 });
 
 // Callback fired if Instance ID token is updated.
@@ -54,13 +54,6 @@ messaging.onTokenRefresh(function() {
         .catch(function(err) {
             console.log('Unable to retrieve refreshed token ', err);
         });
-});
-
-// Handle incoming messages
-messaging.onMessage(function(payload) {
-    alert("Notification received: ", payload);
-    console.log("Notification received: ", payload);
-    //toastr["info"](payload.notification.body, payload.notification.title);
 });
 
 // Send the Instance ID token your application server, so that it can:
