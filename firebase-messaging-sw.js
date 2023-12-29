@@ -1,6 +1,6 @@
 // Give the service worker access to Firebase Messaging.
-importScripts('/firebase-app.js')
-importScripts('/firebase-messaging.js')
+importScripts('firebase-app.js')
+importScripts('firebase-messaging.js')
 
 // Initialize the Firebase app in the service worker by passing in the messagingSenderId.
 var config = {
