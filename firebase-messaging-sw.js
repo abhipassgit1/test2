@@ -1,24 +1,40 @@
-// Give the service worker access to Firebase Messaging.
+importScripts("https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js");
+importScripts(
+    "https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js",
+);
+// For an optimal experience using Cloud Messaging, also add the Firebase SDK for Analytics.
+importScripts(
+    "https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js",
+);
 
-// Initialize the Firebase app in the service worker by passing in the messagingSenderId.
-var config = {
-    messagingSenderId: "sender_id"
-};
-firebase.initializeApp(config);
+// Initialize the Firebase app in the service worker by passing in the
+// messagingSenderId.
 
-// Retrieve an instance of Firebase Data Messaging so that it can handle background messages.
+firebase.initializeApp({
+        'messagingSenderId': '582035422102',
+            'apiKey': 'AIzaSyC5sB3mOpW7-Cfv8eLAz_7a-BlXq_okNkA',
+            'projectId': 'copart-vehiclebidding',
+            'appId': '1:582035422102:web:ce05f3c8d43bd2ea4efbb7'
+      });
+
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
 const messaging = firebase.messaging();
 
-// Handle messages when the web page is in the foreground
-messaging.onMessage(function(payload) {
-    const notificationTitle = 'Data Message Title';
+messaging.setBackgroundMessageHandler(function(payload) {
+    console.log(
+        "[firebase-messaging-sw.js] Received background message ",
+        payload,
+    );
+    // Customize notification here
+    const notificationTitle = "Background Message Title";
     const notificationOptions = {
-        body: 'Data Message body',
-        icon: 'alarm.png'
+        body: "Background Message body.",
+        icon: "/itwonders-web-logo.png",
     };
 
-    // Show the notification only when the web page is in the foreground
-    if (document.visibilityState === 'visible') {
-        self.registration.showNotification(notificationTitle, notificationOptions);
-    }
+    return self.registration.showNotification(
+        notificationTitle,
+        notificationOptions,
+    );
 });
