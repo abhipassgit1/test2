@@ -1,78 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Web App</title>
-    
-    <!-- Include Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-messaging-compat.js"></script>
-
-    <!-- Your Firebase project configuration and initialization script -->
+<html>
+<title>Firebase Messaging Demo</title>
+<style>
+    div {
+        margin-bottom: 15px;
+    }
+</style>
+<body>
+    <div id="token"></div>
+    <div id="msg"></div>
+    <div id="notis"></div>
+    <div id="err"></div>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>
     <script>
-        // Your Firebase project configuration
-        const firebaseConfig = {
-            apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-  measurementId: ""
-        };
-
+        MsgElem = document.getElementById("msg");
+        TokenElem = document.getElementById("token");
+        NotisElem = document.getElementById("notis");
+        ErrElem = document.getElementById("err");
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // Initialize Firebase Cloud Messaging
+        // TODO: Replace with your project's customized code snippet
+        /*var config = {
+            'messagingSenderId': '295832502906',
+            'apiKey': 'AIzaSyDl5Sd5wlNAlYH4SnhrFgIYjBNNmQxY5hg',
+            'projectId': 'webpush-b243b',
+            'appId': '1:295832502906:web:0e10382aa27705e39c71c3',
+        };*/
+        if('serviceWorker' in navigator) { 
+            try{
+            window.addEventListener('load',()=>{
+               
+                    navigator.serviceWorker.register('../firebase/firebase-messaging-sw.js')
+        .then(function(registration) {
+         console.log("Service Worker Registered");
+         var config = {
+            'messagingSenderId': '582035422102',
+            'apiKey': 'AIzaSyC5sB3mOpW7-Cfv8eLAz_7a-BlXq_okNkA',
+            'projectId': 'copart-vehiclebidding',
+            'appId': '1:582035422102:web:ce05f3c8d43bd2ea4efbb7'
+      };
+        firebase.initializeApp(config);
         const messaging = firebase.messaging();
-        messaging.getToken().then((currentToken) => {
-            if (currentToken) {
-                console.log('FCM Token:', currentToken);
-                // Send the token to your server if needed
-            } else {
-                console.log('No FCM token available');
-            }
-        }).catch((err) => {
-            console.error('Error getting FCM token:', err);
-        });
 
-        // Handle incoming messages
-        messaging.onMessage((payload) => {
-            console.log('Notification received:', payload);
-            // Handle the notification here (e.g., show a notification to the user)
+         messaging.useServiceWorker(registration);
+
+              firebaseNoti();
+          }); 
+            });
+          }
+          catch(err){
+              console.log(err.message);
+          }
+          }
+        /*var config = {
+        apiKey: "AIzaSyDl5Sd5wlNAlYH4SnhrFgIYjBNNmQxY5hg",
+        authDomain: "webpush-b243b.firebaseapp.com",
+        databaseURL: "https://webpush-b243b.firebaseio.com",
+        projectId: "webpush-b243b",
+        storageBucket: "webpush-b243b.appspot.com",
+        messagingSenderId: "295832502906",
+        appId: "1:295832502906:web:0e10382aa27705e39c71c3"
+      };
+        firebase.initializeApp(config);*/
+
+       
+
+        function firebaseNoti(){
+            
+             const messaging = firebase.messaging();
+        messaging
+            .requestPermission()
+            .then(function () {
+                MsgElem.innerHTML = "Notification permission granted." 
+                console.log("Notification permission granted.");
+                
+                // get the token in the form of promise
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                TokenElem.innerHTML = "token is : " + token
+            })
+            .catch(function (err) {
+                ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
+                console.log("Unable to get permission to notify.", err);
+            });
+
+        let enableForegroundNotification = true;
+        messaging.onMessage(function(payload) {
+            console.log("Message received. ", payload);
+            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload);
+
+            if(enableForegroundNotification) {
+                const {title, ...options} = JSON.parse(payload.data.notification);
+                navigator.serviceWorker.getRegistrations().then(registration => {
+                    registration[0].showNotification(title, options);
+                });
+            }
         });
+        }
     </script>
 
-    <!-- Include your other scripts, styles, etc. -->
-</head>
-<body>
+    </body>
 
-<!-- Your HTML content goes here -->
-
-<script defer>
-    // Your consolidated script here
-    // Example: subscribe to a topic
-    function subscribeToTopic() {
-        messaging.subscribeToTopic('example-topic').then(() => {
-            console.log('Subscribed to topic: example-topic');
-        }).catch((err) => {
-            console.error('Error subscribing to topic:', err);
-        });
-    }
-
-    // Example: unsubscribe from a topic
-    function unsubscribeFromTopic() {
-        messaging.unsubscribeFromTopic('example-topic').then(() => {
-            console.log('Unsubscribed from topic: example-topic');
-        }).catch((err) => {
-            console.error('Error unsubscribing from topic:', err);
-        });
-    }
-</script>
-
-</body>
 </html>
