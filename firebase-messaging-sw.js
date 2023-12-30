@@ -11,10 +11,10 @@ importScripts(
 // messagingSenderId.
 
 firebase.initializeApp({
-        'messagingSenderId': '582035422102',
-            'apiKey': 'AIzaSyC5sB3mOpW7-Cfv8eLAz_7a-BlXq_okNkA',
-            'projectId': 'copart-vehiclebidding',
-            'appId': '1:582035422102:web:ce05f3c8d43bd2ea4efbb7'
+        'messagingSenderId': '',
+            'apiKey': '',
+            'projectId': '',
+            'appId': ''
       });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
