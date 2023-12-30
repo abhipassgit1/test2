@@ -1,6 +1,6 @@
 // Initialize the Firebase app by passing in the messagingSenderId
 var config = {
-    messagingSenderId: "582035422102"
+    messagingSenderId: "sender_id"
 };
 firebase.initializeApp(config);
 
