@@ -2,7 +2,7 @@
 
 // Initialize the Firebase app in the service worker by passing in the messagingSenderId.
 var config = {
-    messagingSenderId: "582035422102"
+    messagingSenderId: "sender_id"
 };
 firebase.initializeApp(config);
 
